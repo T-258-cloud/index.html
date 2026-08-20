@@ -1,1 +1,525 @@
-file:///C:/Users/Acer/Downloads/index_7.html
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заявка на ремонт — UP&amp;DO dental hub</title>
+<meta name="description" content="Подайте заявку на ремонт бінокулярів та освітлювального обладнання Univet.">
+<style>
+  html, body { margin: 0; padding: 0; background: #FAF7F1; }
+</style>
+</head>
+<body>
+<div id="up-and-do-repair-root"></div>
+<style>
+  #up-and-do-repair-root, #up-and-do-repair-root * { box-sizing: border-box; }
+  #up-and-do-repair-root {
+    --bg: #FAF7F1;
+    --panel: #F1EDE3;
+    --field: #EFEBE1;
+    --border: #DCD5C4;
+    --ink: #1E2430;
+    --ink-soft: #565B63;
+    --muted: #8A8578;
+    --accent: #B75C33;
+    --ok: #4A7A5E;
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 44px 28px 60px;
+    border-radius: 4px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  #up-and-do-repair-root .mono {
+    font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #up-and-do-repair-root .eyebrow {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11.5px; color: var(--ink-soft); margin-bottom: 22px;
+  }
+  #up-and-do-repair-root .eyebrow::before {
+    content: ""; width: 22px; height: 2px; background: var(--accent); display: inline-block;
+  }
+  #up-and-do-repair-root h1 {
+    font-size: 34px; line-height: 1.18; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.01em;
+  }
+  #up-and-do-repair-root .lede {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px; line-height: 1.55; color: var(--ink-soft); max-width: 54ch; margin: 0 0 36px;
+  }
+  #up-and-do-repair-root .section { margin-bottom: 34px; }
+  #up-and-do-repair-root .section-title {
+    font-size: 11px; color: var(--accent); margin-bottom: 16px; display: flex; align-items: baseline; gap: 8px;
+  }
+  #up-and-do-repair-root .section-title .num { color: var(--muted); }
+  #up-and-do-repair-root .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  #up-and-do-repair-root .grid + .grid,
+  #up-and-do-repair-root .field + .grid,
+  #up-and-do-repair-root .grid + .field { margin-top: 20px; }
+  #up-and-do-repair-root .field { margin-bottom: 20px; }
+  #up-and-do-repair-root .grid .field { margin-bottom: 0; }
+  #up-and-do-repair-root label { display: block; font-size: 10.5px; color: var(--ink-soft); margin-bottom: 8px; }
+  #up-and-do-repair-root input[type=text],
+  #up-and-do-repair-root input[type=tel],
+  #up-and-do-repair-root input[type=email],
+  #up-and-do-repair-root input[type=number],
+  #up-and-do-repair-root select,
+  #up-and-do-repair-root textarea {
+    width: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14.5px; padding: 13px 14px; background: var(--field); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--ink); outline: none; appearance: none;
+  }
+  #up-and-do-repair-root select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23565B63' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+  }
+  #up-and-do-repair-root input:focus,
+  #up-and-do-repair-root select:focus,
+  #up-and-do-repair-root textarea:focus {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(183,92,51,0.12);
+  }
+  #up-and-do-repair-root input::placeholder, #up-and-do-repair-root textarea::placeholder { color: var(--muted); }
+  #up-and-do-repair-root textarea { min-height: 90px; resize: vertical; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  #up-and-do-repair-root .optional-tag {
+    color: var(--muted); text-transform: none; letter-spacing: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px;
+  }
+  #up-and-do-repair-root .half { max-width: calc(50% - 10px); }
+  #up-and-do-repair-root .part-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  #up-and-do-repair-root .part-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px 8px 12px; background: var(--field); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; font-size: 11.5px; color: var(--ink-soft);
+    text-align: center; transition: all .15s ease;
+  }
+  #up-and-do-repair-root .part-btn svg { stroke: var(--ink-soft); transition: stroke .15s ease; }
+  #up-and-do-repair-root .part-btn.selected { border-color: var(--accent); background: rgba(183,92,51,0.08); color: var(--accent); }
+  #up-and-do-repair-root .part-btn.selected svg { stroke: var(--accent); }
+
+  #up-and-do-repair-root .attach-zone {
+    border: 1px dashed var(--border); border-radius: 8px; padding: 18px; background: var(--field);
+  }
+  #up-and-do-repair-root .attach-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--ink);
+    padding: 9px 16px; border-radius: 6px; font-size: 13px; cursor: pointer;
+  }
+  #up-and-do-repair-root .attach-hint {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11.5px; color: var(--muted); margin-top: 8px;
+  }
+  #up-and-do-repair-root .attach-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  #up-and-do-repair-root .attach-chip {
+    position: relative; width: 78px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #up-and-do-repair-root .attach-thumb {
+    width: 78px; height: 78px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border); display: block;
+  }
+  #up-and-do-repair-root .attach-file-icon {
+    width: 78px; height: 78px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--panel); display: flex; align-items: center; justify-content: center; color: var(--ink-soft);
+  }
+  #up-and-do-repair-root .attach-name {
+    font-size: 10px; color: var(--ink-soft); margin-top: 4px; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #up-and-do-repair-root .attach-remove {
+    position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--ink); color: #fff; border: 2px solid var(--bg); font-size: 12px; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+
+  #up-and-do-repair-root .submit-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--ink); color: #F5F1E8; border: none; padding: 15px 30px; border-radius: 6px;
+    font-size: 14.5px; cursor: pointer; margin-top: 6px;
+  }
+  #up-and-do-repair-root .submit-btn:hover { opacity: 0.92; }
+  #up-and-do-repair-root .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  #up-and-do-repair-root .error-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12.5px; color: #B23A3A; margin-top: 10px;
+  }
+  #up-and-do-repair-root .confirm-panel {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 28px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #up-and-do-repair-root .confirm-panel .ok-badge {
+    display: inline-block; font-family: ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em;
+    color: var(--ok); text-transform: uppercase; margin-bottom: 10px;
+  }
+  #up-and-do-repair-root .req-number { font-family: ui-monospace, monospace; font-size: 26px; font-weight: 600; letter-spacing: 0.02em; margin: 4px 0 16px; }
+  #up-and-do-repair-root .copy-btn {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: transparent; border: 1px solid var(--border); color: var(--ink-soft);
+    padding: 8px 14px; border-radius: 6px; font-size: 12.5px; cursor: pointer;
+  }
+  @media (max-width: 560px) {
+    #up-and-do-repair-root .grid { grid-template-columns: 1fr; }
+    #up-and-do-repair-root .half { max-width: 100%; }
+    #up-and-do-repair-root .part-grid { grid-template-columns: repeat(2, 1fr); }
+    #up-and-do-repair-root h1 { font-size: 27px; }
+  }
+</style>
+
+<script>
+(function() {
+  const BINOCULAR_GROUPS = [
+    { label: 'TTL Galilean', models: ['COOL','LOOK','TECHNE GALILEAN','TECHNE RX GALILEAN','ASH GALILEAN','NEW ONE GALILEAN','ONE GALILEAN','ITA 2023 GALILEAN','ITA GALILEAN','NEW TECHNE 2026 GALILEAN'] },
+    { label: 'TTL Prismatic', models: ['TECHNE PRISMATIC','TECHNE RX PRISMATIC','ASH PRISMATIC','NEW ONE PRISMATIC','ONE PRISMATIC','ITA 2023 PRISMATIC','ITA PRISMATIC','NEW TECHNE 2026 PRISMATIC'] },
+    { label: 'TTL Ergo', models: ['ASH ERGO','ITA ERGO','ONE ERGO','TECHNE ERGO','NEW TECHNE ERGO'] },
+    { label: 'MYERGO Galileiano', models: ['REGENT SQUARE','SOHO ROUND'] },
+    { label: 'MYERGO RFR', models: ['REGENT SQUARE','SOHO ROUND'] },
+    { label: 'Відкидні (Galilean оптика)', models: ['AIR-X GALILEAN','EVO GALILEAN'] },
+    { label: 'Відкидні (Prismatic оптика)', models: ['AIR-X PRISMATIC','HEADBAND PRISMATIC'] },
+  ];
+
+  const LIGHT_GROUPS = [
+    { label: 'EOS Wireless', models: ['EOS WIRELESS'] },
+    { label: 'З пультом керування', models: ['EOS HP'] },
+    { label: 'Системи підсвітки', models: ['EOS','EOS 2.0','EOS 2.0S','EOS NEXT','LYNX','LYNXPRO'] },
+  ];
+
+  const CATEGORIES = [
+    { id: 'binoculars', label: 'Бінокуляри', groups: BINOCULAR_GROUPS },
+    { id: 'light', label: 'Світло', groups: LIGHT_GROUPS },
+  ];
+
+  const PARTS = [
+    { id: 'telescope', label: 'Об’єктив (телескоп)', icon: '<circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M11 12h2"/>' },
+    { id: 'carrier-lens', label: 'Захисна лінза', icon: '<path d="M4 8c2-3 6-4 8-4s6 1 8 4l-2 8c-1 2-3 2-6 2s-5 0-6-2z"/>' },
+    { id: 'frame', label: 'Оправа', icon: '<path d="M2 10c1-2 3-3 5-3s4 1 5 3M12 10c1-2 3-3 5-3s4 1 5 3"/><circle cx="7" cy="12" r="3.2"/><circle cx="17" cy="12" r="3.2"/><path d="M10 12h4"/>' },
+    { id: 'lighting', label: 'Підсвітка / кабель', icon: '<rect x="9" y="2" width="6" height="10" rx="2"/><path d="M12 12v6"/><path d="M9 20h6"/>' },
+    { id: 'other', label: 'Інше', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/>' },
+  ];
+
+  const MAX_ATTACHMENTS = 4;
+  const MAX_TOTAL_BYTES = 3.2 * 1024 * 1024;
+
+  const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz4gkxRUeX_daVe11zDpTp6156tK5jSaVJiRANrpLwvZFM5AMFVGKN725a9xixZ_RBPog/exec';
+
+  const root = document.getElementById('up-and-do-repair-root');
+
+  function el(tag, attrs, children) {
+    const e = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === 'class') e.className = attrs[k];
+      else if (k === 'html') e.innerHTML = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach(c => c && e.appendChild(c));
+    return e;
+  }
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + ' Б';
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' КБ';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' МБ';
+  }
+
+  function genRequestNumber() {
+    const year = new Date().getFullYear();
+    const n = Math.floor(1000 + Math.random() * 9000);
+    return 'UD-' + year + '-' + n;
+  }
+
+  function readAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = () => reject(new Error('read failed'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  root.appendChild(el('div', { class: 'eyebrow mono' }, [document.createTextNode('Заявка на ремонт')]));
+  root.appendChild(el('h1', {}, [document.createTextNode('Подайте заявку на ремонт обладнання')]));
+  root.appendChild(el('p', { class: 'lede' }, [document.createTextNode(
+    'Заповніть форму нижче — після відправки ви отримаєте номер заявки, і менеджер зв’яжеться з вами найближчим часом.'
+  )]));
+
+  const form = el('form');
+
+  const s1 = el('div', { class: 'section' });
+  s1.appendChild(el('div', { class: 'section-title mono' }, [el('span', { class: 'num' }, [document.createTextNode('01')]), document.createTextNode('Дані клієнта')]));
+  const inName = el('input', { type: 'text', placeholder: 'напр. ТОВ «Стоматологія Плюс» / Іваненко Іван', required: 'required' });
+  const inPhone = el('input', { type: 'tel', placeholder: '+380', required: 'required' });
+  const inEmail = el('input', { type: 'email', placeholder: 'name@clinic.ua' });
+  const inCity = el('input', { type: 'text', placeholder: 'напр. Київ', required: 'required' });
+
+  function field(labelText, inputEl, tag) {
+    const f = el('div', { class: 'field' });
+    const lbl = el('label', { class: 'mono' }, [document.createTextNode(labelText)]);
+    if (tag) lbl.appendChild(el('span', { class: 'optional-tag' }, [document.createTextNode(' — ' + tag)]));
+    f.appendChild(lbl);
+    f.appendChild(inputEl);
+    return f;
+  }
+
+  const grid1a = el('div', { class: 'grid' });
+  grid1a.appendChild(field('ПІБ / назва клініки', inName));
+  grid1a.appendChild(field('Номер телефону', inPhone));
+  s1.appendChild(grid1a);
+  const grid1b = el('div', { class: 'grid' });
+  grid1b.appendChild(field('Email', inEmail));
+  grid1b.appendChild(field('Місто', inCity));
+  s1.appendChild(grid1b);
+  form.appendChild(s1);
+
+  const s2 = el('div', { class: 'section' });
+  s2.appendChild(el('div', { class: 'section-title mono' }, [el('span', { class: 'num' }, [document.createTextNode('02')]), document.createTextNode('Дані про обладнання')]));
+
+  const selCategory = el('select', { required: 'required' });
+  selCategory.appendChild(el('option', { value: '' }, [document.createTextNode('Оберіть категорію')]));
+  CATEGORIES.forEach(c => selCategory.appendChild(el('option', { value: c.id }, [document.createTextNode(c.label)])));
+
+  const selModel = el('select', { required: 'required', disabled: 'disabled' });
+  selModel.appendChild(el('option', { value: '' }, [document.createTextNode('Спочатку оберіть категорію')]));
+  selCategory.addEventListener('change', () => {
+    const cat = CATEGORIES.find(c => c.id === selCategory.value);
+    selModel.innerHTML = '';
+    if (!cat) {
+      selModel.appendChild(el('option', { value: '' }, [document.createTextNode('Спочатку оберіть категорію')]));
+      selModel.disabled = true;
+      return;
+    }
+    selModel.disabled = false;
+    selModel.appendChild(el('option', { value: '' }, [document.createTextNode('Оберіть модель')]));
+    cat.groups.forEach(g => {
+      const grp = el('optgroup', { label: g.label });
+      g.models.forEach(m => grp.appendChild(el('option', { value: m }, [document.createTextNode(m)])));
+      selModel.appendChild(grp);
+    });
+  });
+
+  const inSerial = el('input', { type: 'text', placeholder: 'вказаний на коробці, якщо маєте коробку' });
+  const currentYear = new Date().getFullYear();
+  const inPurchaseYear = el('input', { type: 'number', placeholder: 'напр. ' + currentYear, min: '2000', max: String(currentYear), required: 'required' });
+
+  const grid2a = el('div', { class: 'grid' });
+  grid2a.appendChild(field('Категорія обладнання', selCategory));
+  grid2a.appendChild(field('Назва / модель виробу', selModel));
+  s2.appendChild(grid2a);
+
+  const grid2b = el('div', { class: 'grid' });
+  grid2b.appendChild(field('Серійний номер', inSerial, 'якщо маєте коробку'));
+  grid2b.appendChild(field('Дата придбання (рік)', inPurchaseYear));
+  s2.appendChild(grid2b);
+
+  form.appendChild(s2);
+
+  const s3 = el('div', { class: 'section' });
+  s3.appendChild(el('div', { class: 'section-title mono' }, [el('span', { class: 'num' }, [document.createTextNode('03')]), document.createTextNode('Що сталося')]));
+
+  const partsField = el('div', { class: 'field' });
+  partsField.appendChild(el('label', { class: 'mono' }, [document.createTextNode('Яка деталь пошкоджена')]));
+  const partGrid = el('div', { class: 'part-grid' });
+  let selectedPart = null;
+  const partBtns = {};
+  PARTS.forEach(p => {
+    const btn = el('div', { class: 'part-btn' }, [
+      el('svg', { width: '26', height: '26', viewBox: '0 0 24 24', fill: 'none', 'stroke-width': '1.6', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', html: p.icon }),
+      el('span', {}, [document.createTextNode(p.label)])
+    ]);
+    btn.addEventListener('click', () => {
+      Object.values(partBtns).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedPart = p.label;
+    });
+    partBtns[p.id] = btn;
+    partGrid.appendChild(btn);
+  });
+  partsField.appendChild(partGrid);
+  s3.appendChild(partsField);
+
+  const inDescClient = el('textarea', { placeholder: 'Своїми словами: що не так з обладнанням?', required: 'required' });
+  s3.appendChild(field('Опис несправності зі слів клієнта', inDescClient));
+
+  const grid3a = el('div', { class: 'grid' });
+  const inWhenStarted = el('input', { type: 'text', placeholder: 'напр. 12.08.2026 або «близько двох тижнів тому»', required: 'required' });
+  const selWorking = el('select', { required: 'required' });
+  [['yes', 'Так, працює'], ['no', 'Ні, не працює'], ['partial', 'Частково / з перебоями']]
+    .forEach(([v, l]) => selWorking.appendChild(el('option', { value: v }, [document.createTextNode(l)])));
+  grid3a.appendChild(field('Коли виникла проблема', inWhenStarted));
+  grid3a.appendChild(field('Чи працює обладнання зараз', selWorking));
+  s3.appendChild(grid3a);
+
+  const inConditions = el('textarea', { placeholder: 'напр. постійно / тільки під час роботи / після падіння / при нагріванні…', required: 'required' });
+  s3.appendChild(field('За яких умов проявляється', inConditions));
+
+  const inActionsTaken = el('textarea', { placeholder: 'напр. перевірили кабель, замінили батарею, нічого не робили…' });
+  s3.appendChild(field('Що вже робили для усунення проблеми', inActionsTaken, 'якщо щось пробували'));
+
+  const attachments = [];
+  const attachField = el('div', { class: 'field' });
+  const attachLabel = el('label', { class: 'mono' }, [document.createTextNode('Фото / відео несправності')]);
+  attachLabel.appendChild(el('span', { class: 'optional-tag' }, [document.createTextNode(' — необов’язково')]));
+  attachField.appendChild(attachLabel);
+
+  const attachZone = el('div', { class: 'attach-zone' });
+  const fileInput = el('input', { type: 'file', accept: 'image/*,video/*', multiple: 'multiple', style: 'display:none;' });
+  const attachBtn = el('button', { type: 'button', class: 'attach-btn' }, [
+    el('svg', { width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', html: '<path d="M12 5v14M5 12h14"/>' }),
+    document.createTextNode('Прикріпити файли')
+  ]);
+  attachBtn.addEventListener('click', () => fileInput.click());
+  const attachHint = el('div', { class: 'attach-hint' }, [document.createTextNode('До ' + MAX_ATTACHMENTS + ' файлів, фото або коротке відео. Великі відео краще надіслати менеджеру окремо.')]);
+  const attachList = el('div', { class: 'attach-list' });
+  attachZone.appendChild(fileInput);
+  attachZone.appendChild(attachBtn);
+  attachZone.appendChild(attachHint);
+  attachZone.appendChild(attachList);
+  attachField.appendChild(attachZone);
+  const attachErr = el('div', { class: 'error-text' });
+  attachField.appendChild(attachErr);
+  s3.appendChild(attachField);
+
+  function currentTotalBytes() {
+    return attachments.reduce((sum, a) => sum + (a.size || 0), 0);
+  }
+
+  function renderAttachList() {
+    attachList.innerHTML = '';
+    attachments.forEach((a, idx) => {
+      const chip = el('div', { class: 'attach-chip' });
+      if (a.dataUrl && a.type.startsWith('image/')) {
+        chip.appendChild(el('img', { class: 'attach-thumb', src: a.dataUrl }));
+      } else {
+        chip.appendChild(el('div', { class: 'attach-file-icon' }, [
+          el('svg', { width: '22', height: '22', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.6', html: '<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>' })
+        ]));
+      }
+      const remove = el('div', { class: 'attach-remove' }, [document.createTextNode('×')]);
+      remove.addEventListener('click', () => { attachments.splice(idx, 1); renderAttachList(); });
+      chip.appendChild(remove);
+      chip.appendChild(el('div', { class: 'attach-name' }, [document.createTextNode(a.name)]));
+      attachList.appendChild(chip);
+    });
+  }
+
+  fileInput.addEventListener('change', async () => {
+    attachErr.textContent = '';
+    const files = Array.from(fileInput.files || []);
+    fileInput.value = '';
+    for (const file of files) {
+      if (attachments.length >= MAX_ATTACHMENTS) {
+        attachErr.textContent = 'Максимум ' + MAX_ATTACHMENTS + ' файли на заявку.';
+        break;
+      }
+      if (currentTotalBytes() + file.size > MAX_TOTAL_BYTES) {
+        attachErr.textContent = 'Файл «' + file.name + '» занадто великий для завантаження тут — надішліть його менеджеру напряму (email/Viber/Telegram) із номером заявки.';
+        continue;
+      }
+      try {
+        const dataUrl = await readAsDataURL(file);
+        attachments.push({ name: file.name, size: file.size, type: file.type, dataUrl });
+        renderAttachList();
+      } catch (e) {
+        attachErr.textContent = 'Не вдалося додати файл «' + file.name + '».';
+      }
+    }
+  });
+
+  form.appendChild(s3);
+
+  const errBox = el('div', { class: 'error-text' });
+  const submitBtn = el('button', { type: 'submit', class: 'submit-btn mono' }, [document.createTextNode('Подати заявку')]);
+  form.appendChild(errBox);
+  form.appendChild(submitBtn);
+
+  root.appendChild(form);
+  const confirmHolder = el('div');
+  root.appendChild(confirmHolder);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.textContent = '';
+    if (!selectedPart) { errBox.textContent = 'Будь ласка, оберіть, яка деталь пошкоджена.'; return; }
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Надсилаємо…';
+
+    const reqNumber = genRequestNumber();
+    const cat = CATEGORIES.find(c => c.id === selCategory.value);
+    const record = {
+      requestNumber: reqNumber,
+      createdAt: new Date().toISOString(),
+      client: {
+        name: inName.value.trim(),
+        phone: inPhone.value.trim(),
+        email: inEmail.value.trim(),
+        city: inCity.value.trim(),
+      },
+      equipment: {
+        category: cat ? cat.label : '',
+        model: selModel.value,
+        serial: inSerial.value.trim(),
+        purchaseYear: inPurchaseYear.value,
+      },
+      issue: {
+        part: selectedPart,
+        descriptionClient: inDescClient.value.trim(),
+        whenStarted: inWhenStarted.value.trim(),
+        conditions: inConditions.value.trim(),
+        currentlyWorking: selWorking.options[selWorking.selectedIndex]?.text || '',
+        actionsTaken: inActionsTaken.value.trim(),
+        attachments: attachments,
+      },
+    };
+
+    if (SHEET_WEBHOOK_URL.indexOf('PASTE_YOUR_APPS_SCRIPT') === 0) {
+      errBox.textContent = 'Форму ще не підключено до Google Таблиці — вставте URL веб-застосунку Apps Script у код форми (SHEET_WEBHOOK_URL).';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Подати заявку';
+      return;
+    }
+
+    const sheetPayload = Object.assign({}, record, {
+      issue: Object.assign({}, record.issue, {
+        attachments: attachments.map(a => ({ name: a.name, size: a.size, type: a.type })),
+      }),
+    });
+
+    try {
+      await fetch(SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(sheetPayload),
+      });
+      showConfirmation(reqNumber);
+    } catch (err) {
+      errBox.textContent = 'Не вдалося надіслати заявку. Перевірте інтернет-з’єднання і спробуйте ще раз.';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Подати заявку';
+    }
+  });
+
+  function showConfirmation(reqNumber) {
+    form.style.display = 'none';
+    confirmHolder.innerHTML = '';
+    const panel = el('div', { class: 'confirm-panel' });
+    panel.appendChild(el('div', { class: 'ok-badge' }, [document.createTextNode('Заявку прийнято')]));
+    panel.appendChild(el('div', { class: 'req-number' }, [document.createTextNode(reqNumber)]));
+    panel.appendChild(el('p', { style: 'margin:0 0 18px; font-size:14px; color: var(--ink-soft); line-height:1.5;' }, [
+      document.createTextNode('Збережіть цей номер — менеджер використає його при зверненні до вас щодо ремонту.')
+    ]));
+    const copyBtn = el('button', { type: 'button', class: 'copy-btn' }, [document.createTextNode('Скопіювати номер')]);
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(reqNumber).then(() => {
+        copyBtn.textContent = 'Скопійовано ✓';
+        setTimeout(() => copyBtn.textContent = 'Скопіювати номер', 1500);
+      });
+    });
+    panel.appendChild(copyBtn);
+    confirmHolder.appendChild(panel);
+  }
+})();
+</script>
+</body>
+</html>
