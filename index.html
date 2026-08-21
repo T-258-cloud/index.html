@@ -159,6 +159,36 @@
     background: transparent; border: 1px solid var(--border); color: var(--ink-soft);
     padding: 8px 14px; border-radius: 6px; font-size: 12.5px; cursor: pointer;
   }
+  #up-and-do-repair-root .consent {
+    display: flex; gap: 10px; align-items: flex-start; margin: 4px 0 22px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px; line-height: 1.5; color: var(--ink-soft);
+  }
+  #up-and-do-repair-root .consent input { margin-top: 2px; width: 16px; height: 16px; accent-color: var(--accent); flex: none; }
+  #up-and-do-repair-root .consent a { color: var(--accent); }
+  #up-and-do-repair-root .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  #up-and-do-repair-root .privacy {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin: -14px 0 24px 26px;
+  }
+  #up-and-do-repair-root .privacy summary {
+    font-size: 12.5px; color: var(--accent); cursor: pointer;
+    list-style: none; display: inline-block; padding: 2px 0;
+  }
+  #up-and-do-repair-root .privacy summary::-webkit-details-marker { display: none; }
+  #up-and-do-repair-root .privacy summary::before { content: "+ "; }
+  #up-and-do-repair-root .privacy[open] summary::before { content: "– "; }
+  #up-and-do-repair-root .privacy summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #up-and-do-repair-root .privacy-body {
+    margin-top: 10px; padding: 14px 16px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    font-size: 12.5px; line-height: 1.6; color: var(--ink-soft); max-width: 62ch;
+  }
+  #up-and-do-repair-root .privacy-body p { margin: 0 0 10px; }
+  #up-and-do-repair-root .privacy-body p:last-child { margin-bottom: 0; }
+  #up-and-do-repair-root .privacy-body strong { color: var(--ink); font-weight: 600; }
+  #up-and-do-repair-root .privacy-body a { color: var(--accent); }
+  #up-and-do-repair-root .part-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 560px) {
     #up-and-do-repair-root .grid { grid-template-columns: 1fr; }
     #up-and-do-repair-root .half { max-width: 100%; }
@@ -199,9 +229,19 @@
   ];
 
   const MAX_ATTACHMENTS = 4;
-  const MAX_TOTAL_BYTES = 3.2 * 1024 * 1024;
+  const MAX_TOTAL_BYTES = 8 * 1024 * 1024;
+  const OTHER_MODEL = 'Інша модель / немає в списку';
 
-  const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz4gkxRUeX_daVe11zDpTp6156tK5jSaVJiRANrpLwvZFM5AMFVGKN725a9xixZ_RBPog/exec';
+  // Це адреса Apps Script, а не Uspacy. Вхідний вебхук CRM у код форми
+  // класти НЕ МОЖНА — вихідний HTML публічний, і тоді писати у вашу CRM
+  // зможе будь-хто. Виклик Uspacy лишається на боці Apps Script.
+  const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxcg-nBOYQvqm5G7R0NFQ1DIs9Vg7XbtUzE2_kKrpDoIuOpC17t8X9vJPRRxnzYmmPYww/exec';
+
+  // Хто відповідає за дані клієнтів. Якщо заявки приймає юрособа або ФОП —
+  // впишіть сюди повну офіційну назву, вона має бути в повідомленні про
+  // обробку персональних даних.
+  const COMPANY_NAME = 'UP&DO dental hub';
+  const CONTACT_EMAIL = 'service_manager@up-and-do.com';
 
   const root = document.getElementById('up-and-do-repair-root');
 
@@ -220,12 +260,6 @@
     if (bytes < 1024) return bytes + ' Б';
     if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' КБ';
     return (bytes / (1024 * 1024)).toFixed(1) + ' МБ';
-  }
-
-  function genRequestNumber() {
-    const year = new Date().getFullYear();
-    const n = Math.floor(1000 + Math.random() * 9000);
-    return 'UD-' + year + '-' + n;
   }
 
   function readAsDataURL(file) {
@@ -248,7 +282,27 @@
   const s1 = el('div', { class: 'section' });
   s1.appendChild(el('div', { class: 'section-title mono' }, [el('span', { class: 'num' }, [document.createTextNode('01')]), document.createTextNode('Дані клієнта')]));
   const inName = el('input', { type: 'text', placeholder: 'напр. ТОВ «Стоматологія Плюс» / Іваненко Іван', required: 'required' });
-  const inPhone = el('input', { type: 'tel', placeholder: '+380', required: 'required' });
+  const inPhone = el('input', {
+    type: 'tel', placeholder: '+380 67 123 45 67', required: 'required',
+    inputmode: 'tel', pattern: '[0-9+()\\s-]{9,20}',
+    title: 'Введіть номер у форматі +380XXXXXXXXX'
+  });
+  // Нормалізація тут, а не тільки на сервері: клієнт одразу бачить,
+  // у якому вигляді номер піде далі.
+  inPhone.addEventListener('blur', () => {
+    const norm = normalizePhone(inPhone.value);
+    if (norm) inPhone.value = norm;
+  });
+
+  function normalizePhone(raw) {
+    const d = String(raw || '').replace(/\D/g, '');
+    if (!d) return '';
+    if (d.length === 12 && d.startsWith('380')) return '+' + d;
+    if (d.length === 11 && d.startsWith('80')) return '+3' + d;
+    if (d.length === 10 && d.startsWith('0')) return '+38' + d;
+    if (d.length === 9) return '+380' + d;
+    return raw;
+  }
   const inEmail = el('input', { type: 'email', placeholder: 'name@clinic.ua' });
   const inCity = el('input', { type: 'text', placeholder: 'напр. Київ', required: 'required' });
 
@@ -292,9 +346,15 @@
     selModel.appendChild(el('option', { value: '' }, [document.createTextNode('Оберіть модель')]));
     cat.groups.forEach(g => {
       const grp = el('optgroup', { label: g.label });
-      g.models.forEach(m => grp.appendChild(el('option', { value: m }, [document.createTextNode(m)])));
+      // Група потрібна окремо: REGENT SQUARE є і в MYERGO Galileiano,
+      // і в MYERGO RFR — без групи ці моделі в CRM не розрізнити.
+      g.models.forEach(m => grp.appendChild(
+        el('option', { value: m, 'data-group': g.label }, [document.createTextNode(m)])
+      ));
       selModel.appendChild(grp);
     });
+    selModel.appendChild(el('option', { value: OTHER_MODEL, 'data-group': '' },
+      [document.createTextNode(OTHER_MODEL)]));
   });
 
   const inSerial = el('input', { type: 'text', placeholder: 'вказаний на коробці, якщо маєте коробку' });
@@ -306,10 +366,27 @@
   grid2a.appendChild(field('Назва / модель виробу', selModel));
   s2.appendChild(grid2a);
 
+  const inArticle = el('input', { type: 'text', placeholder: 'з накладної, якщо є' });
+  const inPurchaseDoc = el('input', { type: 'text', placeholder: 'напр. видаткова №1234 від 12.03.2025' });
+  const selRepairType = el('select', { required: 'required' });
+  [['', 'Оберіть тип'],
+   ['Гарантійний ремонт', 'Гарантійний ремонт'],
+   ['Негарантійний ремонт', 'Негарантійний ремонт'],
+   ['Не знаю', 'Не знаю']]
+    .forEach(([v, l]) => selRepairType.appendChild(el('option', { value: v }, [document.createTextNode(l)])));
+
   const grid2b = el('div', { class: 'grid' });
   grid2b.appendChild(field('Серійний номер', inSerial, 'якщо маєте коробку'));
-  grid2b.appendChild(field('Дата придбання (рік)', inPurchaseYear));
+  grid2b.appendChild(field('Артикул', inArticle, 'необов’язково'));
   s2.appendChild(grid2b);
+
+  const grid2c = el('div', { class: 'grid' });
+  grid2c.appendChild(field('Дата придбання (рік)', inPurchaseYear));
+  grid2c.appendChild(field('Тип ремонту', selRepairType));
+  s2.appendChild(grid2c);
+
+  // Гарантія рахується від дати продажу — без документа її не визначити.
+  s2.appendChild(field('Документ на придбання / рахунок', inPurchaseDoc, 'номер накладної або чека, якщо є'));
 
   form.appendChild(s2);
 
@@ -318,18 +395,26 @@
 
   const partsField = el('div', { class: 'field' });
   partsField.appendChild(el('label', { class: 'mono' }, [document.createTextNode('Яка деталь пошкоджена')]));
-  const partGrid = el('div', { class: 'part-grid' });
+  const partGrid = el('div', { class: 'part-grid', role: 'radiogroup', 'aria-label': 'Пошкоджена деталь' });
   let selectedPart = null;
   const partBtns = {};
   PARTS.forEach(p => {
-    const btn = el('div', { class: 'part-btn' }, [
+    const btn = el('div', { class: 'part-btn', role: 'radio', tabindex: '0', 'aria-checked': 'false' }, [
       el('svg', { width: '26', height: '26', viewBox: '0 0 24 24', fill: 'none', 'stroke-width': '1.6', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', html: p.icon }),
       el('span', {}, [document.createTextNode(p.label)])
     ]);
-    btn.addEventListener('click', () => {
-      Object.values(partBtns).forEach(b => b.classList.remove('selected'));
+    const pick = () => {
+      Object.values(partBtns).forEach(b => {
+        b.classList.remove('selected');
+        b.setAttribute('aria-checked', 'false');
+      });
       btn.classList.add('selected');
+      btn.setAttribute('aria-checked', 'true');
       selectedPart = p.label;
+    };
+    btn.addEventListener('click', pick);
+    btn.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); }
     });
     partBtns[p.id] = btn;
     partGrid.appendChild(btn);
@@ -343,7 +428,9 @@
   const grid3a = el('div', { class: 'grid' });
   const inWhenStarted = el('input', { type: 'text', placeholder: 'напр. 12.08.2026 або «близько двох тижнів тому»', required: 'required' });
   const selWorking = el('select', { required: 'required' });
-  [['yes', 'Так, працює'], ['no', 'Ні, не працює'], ['partial', 'Частково / з перебоями']]
+  // Порожній перший пункт: інакше «Так, працює» стоїть за замовчуванням
+  // і люди проскакують питання, не відповівши на нього.
+  [['', 'Оберіть варіант'], ['yes', 'Так, працює'], ['no', 'Ні, не працює'], ['partial', 'Частково / з перебоями']]
     .forEach(([v, l]) => selWorking.appendChild(el('option', { value: v }, [document.createTextNode(l)])));
   grid3a.appendChild(field('Коли виникла проблема', inWhenStarted));
   grid3a.appendChild(field('Чи працює обладнання зараз', selWorking));
@@ -427,6 +514,46 @@
 
   form.appendChild(s3);
 
+  // Пастка для ботів: приховане поле, яке заповнюють лише автозаповнювачі
+  // спам-скриптів. Сервер відкидає такі запити мовчки.
+  const inHoneypot = el('input', { type: 'text', name: 'website', tabindex: '-1', autocomplete: 'off' });
+  const hpWrap = el('div', { class: 'hp', 'aria-hidden': 'true' }, [inHoneypot]);
+  form.appendChild(hpWrap);
+
+  const inConsent = el('input', { type: 'checkbox', required: 'required', id: 'ud-consent' });
+  const consent = el('label', { class: 'consent', for: 'ud-consent' }, [
+    inConsent,
+    el('span', {}, [document.createTextNode(
+      'Погоджуюсь на обробку моїх персональних даних для опрацювання заявки на ремонт.'
+    )])
+  ]);
+  form.appendChild(consent);
+
+  // Повідомлення про обробку даних тримаємо тут, а не за посиланням:
+  // так воно завжди актуальне й не залежить від окремої сторінки на сайті.
+  // <details> лежить ПОЗА <label> — інакше клік по «Докладніше»
+  // перемикав би чекбокс згоди.
+  const privacy = el('details', { class: 'privacy' });
+  privacy.appendChild(el('summary', {}, [document.createTextNode('Докладніше про обробку даних')]));
+  privacy.appendChild(el('div', { class: 'privacy-body', html:
+    '<p><strong>Хто збирає.</strong> ' + COMPANY_NAME + '. Питання щодо ваших даних — ' +
+      '<a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.</p>' +
+    '<p><strong>Які дані.</strong> ПІБ або назва клініки, телефон, email, місто; дані про обладнання ' +
+      '(модель, серійний номер, рік і документ придбання); опис несправності та додані фото чи відео.</p>' +
+    '<p><strong>Навіщо.</strong> Щоб опрацювати заявку: визначити, чи випадок гарантійний, ' +
+      'зв’язатися з вами, організувати доставку виробу та сам ремонт.</p>' +
+    '<p><strong>Де зберігаються.</strong> У сервісах Google (Таблиці, Диск) і в CRM-системі Uspacy. ' +
+      'Стороннім особам дані не передаються — окрім виробника чи сервісного центру, ' +
+      'якщо цього потребує ремонт.</p>' +
+    '<p><strong>Скільки зберігаємо.</strong> До трьох років після завершення ремонту — ' +
+      'на випадок повторного звернення щодо того самого виробу.</p>' +
+    '<p><strong>Ваші права.</strong> Ви можете дізнатися, які саме дані ми зберігаємо, виправити їх ' +
+      'або попросити видалити. Напишіть на ' +
+      '<a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a> — відповімо протягом 30 днів. ' +
+      'Згоду можна відкликати будь-коли, але тоді ми не зможемо продовжити ремонт.</p>'
+  }));
+  form.appendChild(privacy);
+
   const errBox = el('div', { class: 'error-text' });
   const submitBtn = el('button', { type: 'submit', class: 'submit-btn mono' }, [document.createTextNode('Подати заявку')]);
   form.appendChild(errBox);
@@ -444,57 +571,64 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Надсилаємо…';
 
-    const reqNumber = genRequestNumber();
     const cat = CATEGORIES.find(c => c.id === selCategory.value);
-    const record = {
-      requestNumber: reqNumber,
+    const modelOption = selModel.options[selModel.selectedIndex];
+
+    const payload = {
       createdAt: new Date().toISOString(),
+      website: inHoneypot.value,
       client: {
         name: inName.value.trim(),
-        phone: inPhone.value.trim(),
+        phone: normalizePhone(inPhone.value.trim()),
         email: inEmail.value.trim(),
         city: inCity.value.trim(),
       },
       equipment: {
         category: cat ? cat.label : '',
+        modelGroup: modelOption ? (modelOption.getAttribute('data-group') || '') : '',
         model: selModel.value,
         serial: inSerial.value.trim(),
+        article: inArticle.value.trim(),
         purchaseYear: inPurchaseYear.value,
+        purchaseDoc: inPurchaseDoc.value.trim(),
       },
       issue: {
+        repairType: selRepairType.value,
         part: selectedPart,
         descriptionClient: inDescClient.value.trim(),
         whenStarted: inWhenStarted.value.trim(),
         conditions: inConditions.value.trim(),
         currentlyWorking: selWorking.options[selWorking.selectedIndex]?.text || '',
         actionsTaken: inActionsTaken.value.trim(),
-        attachments: attachments,
+        // Тепер їде і сам вміст файлу, а не лише назва —
+        // раніше фото показувалося клієнту й тихо зникало.
+        attachments: attachments.map(a => ({
+          name: a.name, size: a.size, type: a.type, dataUrl: a.dataUrl,
+        })),
       },
     };
 
-    if (SHEET_WEBHOOK_URL.indexOf('PASTE_YOUR_APPS_SCRIPT') === 0) {
-      errBox.textContent = 'Форму ще не підключено до Google Таблиці — вставте URL веб-застосунку Apps Script у код форми (SHEET_WEBHOOK_URL).';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Подати заявку';
-      return;
-    }
-
-    const sheetPayload = Object.assign({}, record, {
-      issue: Object.assign({}, record.issue, {
-        attachments: attachments.map(a => ({ name: a.name, size: a.size, type: a.type })),
-      }),
-    });
-
     try {
-      await fetch(SHEET_WEBHOOK_URL, {
+      // Без mode:'no-cors' — інакше відповідь непрозора, і форма рапортує
+      // про успіх навіть тоді, коли заявка нікуди не збереглася.
+      // Apps Script із доступом «Anyone» віддає CORS-заголовки сам,
+      // а text/plain не викликає preflight.
+      const res = await fetch(SHEET_WEBHOOK_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(sheetPayload),
+        body: JSON.stringify(payload),
       });
-      showConfirmation(reqNumber);
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      const result = await res.json();
+      if (result.status !== 'ok') throw new Error(result.error || 'unknown');
+
+      // Номер видає сервер наскрізним лічильником, а не браузер навмання.
+      showConfirmation(result.requestNumber);
     } catch (err) {
-      errBox.textContent = 'Не вдалося надіслати заявку. Перевірте інтернет-з’єднання і спробуйте ще раз.';
+      errBox.textContent = 'Не вдалося надіслати заявку. Перевірте зв’язок і спробуйте ще раз. ' +
+        'Якщо помилка повторюється — напишіть менеджеру на service_manager@up-and-do.com.';
       submitBtn.disabled = false;
       submitBtn.textContent = 'Подати заявку';
     }
