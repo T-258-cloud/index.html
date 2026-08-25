@@ -23,6 +23,8 @@
     --ink: #141414;
     --ink-soft: #5A5A5A;
     --muted: #8C8C8C;
+    --label: #3D3D3D;
+    --placeholder: #9A9A9A;
     --line: #DCDCDC;
     --line-soft: #ECECEC;
     --panel: #F4F4F4;
@@ -33,7 +35,7 @@
     --danger: #B3261E;
 
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     color: var(--ink);
     background: var(--bg);
     padding: 72px 32px 88px;
@@ -111,8 +113,8 @@
   }
 
   #up-and-do-repair-root .lede {
-    font-size: 15.5px; line-height: 1.6; color: var(--ink-soft);
-    max-width: 52ch; margin: 0 0 60px; font-weight: 300;
+    font-size: 16px; line-height: 1.65; color: var(--ink-soft);
+    max-width: 52ch; margin: 0 0 60px; font-weight: 400;
   }
 
   /* Секції розділені волосяною лінією, а не відступом — так робить Univet. */
@@ -136,11 +138,14 @@
   #up-and-do-repair-root .field { margin-bottom: 26px; }
   #up-and-do-repair-root .grid .field { margin-bottom: 0; }
 
+  /* Селектор навмисно з класом: підписи мають class="mono", і правило .mono
+     має вищу специфічність за просте label — без цього вага 500 не діяла. */
+  #up-and-do-repair-root label.mono,
   #up-and-do-repair-root label {
     display: block;
     font-family: 'Oswald', 'Arial Narrow', sans-serif;
-    font-weight: 400; font-size: 10.5px; letter-spacing: 0.13em; text-transform: uppercase;
-    color: var(--ink-soft); margin-bottom: 10px;
+    font-weight: 500; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--label); margin-bottom: 11px;
   }
 
   /* Поля — лінією знизу, без коробки. Головна прикмета фірмового стилю. */
@@ -151,7 +156,7 @@
   #up-and-do-repair-root select,
   #up-and-do-repair-root textarea {
     width: 100%;
-    font-family: inherit; font-weight: 300; font-size: 15.5px;
+    font-family: inherit; font-weight: 400; font-size: 16.5px;
     padding: 9px 0 11px;
     background: transparent;
     border: none;
@@ -175,7 +180,7 @@
     padding-bottom: 10px;
   }
   #up-and-do-repair-root input::placeholder,
-  #up-and-do-repair-root textarea::placeholder { color: var(--muted); font-weight: 300; }
+  #up-and-do-repair-root textarea::placeholder { color: var(--placeholder); font-weight: 400; }
   #up-and-do-repair-root textarea {
     min-height: 76px; resize: vertical; line-height: 1.55;
   }
@@ -183,7 +188,7 @@
 
   #up-and-do-repair-root .optional-tag {
     color: var(--muted); text-transform: none; letter-spacing: 0.02em;
-    font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 300;
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 400;
   }
   #up-and-do-repair-root .half { max-width: calc(50% - 17px); }
 
@@ -197,8 +202,8 @@
     border-radius: 2px;
     cursor: pointer;
     font-family: 'Oswald', 'Arial Narrow', sans-serif;
-    font-weight: 400; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ink-soft);
+    font-weight: 500; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--label);
     text-align: center; line-height: 1.35;
     transition: border-color .18s ease, color .18s ease, background-color .18s ease;
   }
@@ -224,7 +229,7 @@
   }
   #up-and-do-repair-root .attach-btn:hover { border-color: var(--accent); color: var(--accent); }
   #up-and-do-repair-root .attach-hint {
-    font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.5; font-weight: 300;
+    font-size: 13px; color: var(--ink-soft); margin-top: 12px; line-height: 1.55; font-weight: 400;
   }
   #up-and-do-repair-root .attach-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
   #up-and-do-repair-root .attach-chip { position: relative; width: 82px; }
@@ -237,8 +242,8 @@
     background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--ink-soft);
   }
   #up-and-do-repair-root .attach-name {
-    font-size: 10px; color: var(--ink-soft); margin-top: 6px; text-align: center;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 300;
+    font-size: 11px; color: var(--ink-soft); margin-top: 6px; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400;
   }
   #up-and-do-repair-root .attach-remove {
     position: absolute; top: -8px; right: -8px; width: 21px; height: 21px; border-radius: 50%;
@@ -246,9 +251,13 @@
     cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
 
+  /* Згода — теж <label>, тому явно скидаємо стиль підписів полів:
+     інакше вона стає вузьким шрифтом і капслоком, і читати її важко. */
   #up-and-do-repair-root .consent {
     display: flex; gap: 12px; align-items: flex-start; margin: 10px 0 20px;
-    font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); font-weight: 300;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14.5px; line-height: 1.55; color: var(--ink); font-weight: 400;
+    text-transform: none; letter-spacing: normal;
     cursor: pointer;
   }
   #up-and-do-repair-root .consent input {
@@ -270,7 +279,7 @@
   #up-and-do-repair-root .privacy-body {
     margin-top: 14px; padding: 20px 22px;
     background: var(--panel); border-left: 2px solid var(--accent);
-    font-size: 12.5px; line-height: 1.65; color: var(--ink-soft); max-width: 62ch; font-weight: 300;
+    font-size: 13.5px; line-height: 1.7; color: var(--ink-soft); max-width: 62ch; font-weight: 400;
   }
   #up-and-do-repair-root .privacy-body p { margin: 0 0 12px; }
   #up-and-do-repair-root .privacy-body p:last-child { margin-bottom: 0; }
