@@ -186,6 +186,10 @@
   }
   #up-and-do-repair-root select:disabled { color: var(--muted); cursor: not-allowed; }
 
+  /* Поле ручного введення моделі: зʼявляється лише за потреби. */
+  #up-and-do-repair-root .other-model { display: none; }
+  #up-and-do-repair-root .other-model.visible { display: block; }
+
   #up-and-do-repair-root .optional-tag {
     color: var(--muted); text-transform: none; letter-spacing: 0.02em;
     font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 400;
@@ -399,7 +403,7 @@
   // Це адреса Apps Script, а не Uspacy. Вхідний вебхук CRM у код форми
   // класти НЕ МОЖНА — вихідний HTML публічний, і тоді писати у вашу CRM
   // зможе будь-хто. Виклик Uspacy лишається на боці Apps Script.
-  const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxTDupN_LwYe-80h3dCqgEH1gUZdRJN1aTx0rVNhLIoJ7dSUsJBQ-QDidpXCUSwVfiq/exec';
+  const SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw93dXI7VYZhDFl9sXaZi5hBlGUaoxFhv5QSGTFzMcVr5NDSYnmcvaXQM38pjZS5hhSPg/exec';
 
   // Хто відповідає за дані клієнтів. Якщо заявки приймає юрособа або ФОП —
   // впишіть сюди повну офіційну назву, вона має бути в повідомленні про
@@ -532,6 +536,10 @@
     });
     selModel.appendChild(el('option', { value: OTHER_MODEL, 'data-group': '' },
       [document.createTextNode(OTHER_MODEL)]));
+
+    // Список моделей перебудувався, вибір скинувся — ховаємо поле
+    // ручного введення, інакше воно лишалося б висіти порожнім.
+    toggleOtherModel();
   });
 
   const inSerial = el('input', { type: 'text', placeholder: 'вказаний на коробці, якщо маєте коробку' });
@@ -542,6 +550,27 @@
   grid2a.appendChild(field('Категорія обладнання', selCategory));
   grid2a.appendChild(field('Назва / модель виробу', selModel));
   s2.appendChild(grid2a);
+
+  // Поле під ручне введення. Ховається, доки в списку не обрано «Інша модель»:
+  // порожня графа «вкажіть модель» під кожною заявкою тільки б заважала.
+  const inOtherModel = el('input', {
+    type: 'text',
+    placeholder: 'напр. напис на дужці або на коробці'
+  });
+  const otherModelField = field('Яка саме модель', inOtherModel,
+    'перепишіть з виробу так, як бачите');
+  otherModelField.classList.add('other-model');
+  s2.appendChild(otherModelField);
+
+  function toggleOtherModel() {
+    const isOther = selModel.value === OTHER_MODEL;
+    otherModelField.classList.toggle('visible', isOther);
+    // Обовʼязковим робимо тільки видиме поле — інакше браузер блокував би
+    // відправку через графу, якої користувач навіть не бачить.
+    if (isOther) inOtherModel.setAttribute('required', 'required');
+    else { inOtherModel.removeAttribute('required'); inOtherModel.value = ''; }
+  }
+  selModel.addEventListener('change', toggleOtherModel);
 
   // Підказка-картинка: клієнт бачить, що обрав саме те, що тримає в руках.
   const catPreview = el('figure', { class: 'cat-preview' });
@@ -786,8 +815,15 @@
       },
       equipment: {
         category: cat ? cat.label : '',
-        modelGroup: modelOption ? (modelOption.getAttribute('data-group') || '') : '',
-        model: selModel.value,
+        // Коли модель вписали руками, у CRM має поїхати саме вона, а не
+        // службовий підпис «Інша модель». Групу позначаємо окремо, щоб
+        // менеджер бачив: це не зі списку, перевірити варто уважніше.
+        modelGroup: selModel.value === OTHER_MODEL
+          ? 'Вказано вручну'
+          : (modelOption ? (modelOption.getAttribute('data-group') || '') : ''),
+        model: selModel.value === OTHER_MODEL
+          ? inOtherModel.value.trim()
+          : selModel.value,
         serial: inSerial.value.trim(),
         article: inArticle.value.trim(),
         purchaseYear: inPurchaseYear.value,
