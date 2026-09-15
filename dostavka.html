@@ -409,7 +409,9 @@
     np:        'Відділення №198',
     recipient: 'ФОП Габорак Микола Іванович',
     code:      '2458405992',
-    phone:     '+380 93 617 35 79'
+    phone:     '+380 93 617 35 79',
+    office:    'просп. Лобановського, 6а, 26 поверх',
+    hours:     'Пн–Пт, 09:00–18:00'
   };
   const CONTACT_EMAIL = 'service_manager@up-and-do.com';
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx0Z7-JrrCyDbc17bnw0X7UyelKeijPXC-_hNSLLm5YtFwLch7kHyIjuJOKQYZJ216pyw/exec';
@@ -513,6 +515,8 @@
   row('ЄДРПОУ / ІПН', OFFICE.code, true);
   row('Нова Пошта', OFFICE.city + ', ' + OFFICE.np, true);
   row('Телефон', OFFICE.phone, true);
+  row('Офіс у Києві', OFFICE.office, true);
+  row('Графік офісу', OFFICE.hours);
   addr.appendChild(dl);
   root.appendChild(addr);
 
@@ -573,7 +577,7 @@
       taxi:  ['Звідки забрати виріб',
               'напр. Київ, вул. Хрещатик 1, клініка «Приклад», запитати Ірину'],
       self:  ['Коли плануєте приїхати',
-              'напр. у четвер після 15:00 — адресу менеджер підкаже телефоном'],
+              'напр. у четвер після 15:00'],
       other: ['Опишіть, як вам зручно',
               'напр. передам з колегою, він буде в Києві у вівторок']
     };
