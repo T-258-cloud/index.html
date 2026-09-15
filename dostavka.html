@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Доставка виробу на ремонт — UP&amp;DO dental hub</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Manrope:wght@300;400;600&display=swap">
+<style>
+  html, body { margin: 0; padding: 0; background: #F2F3F2; }
+</style>
+</head>
+<body>
+<div id="up-and-do-repair-root"></div>
+<style>
+
+  #up-and-do-repair-root, #up-and-do-repair-root * { box-sizing: border-box; }
+
+  #up-and-do-repair-root {
+    /* Палітра з univetloupes.com: фірмовий зелений, майже чорний,
+       світло-сірий. Зелений — єдиний акцент, і саме тому працює. */
+    --ink: #141414;
+    --ink-soft: #5A5A5A;
+    --muted: #8C8C8C;
+    --label: #3D3D3D;
+    --placeholder: #9A9A9A;
+    --line: #B9BDB9;
+    --line-soft: #C9CCC9;
+    --panel: #FFFFFF;
+    --bg: #F2F3F2;
+    --accent: #1F7D3E;
+    --accent-deep: #186231;
+    --accent-wash: rgba(31, 125, 62, 0.07);
+    --danger: #B3261E;
+
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 72px 32px 88px;
+    max-width: 780px;
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Вузький Oswald — другий шрифт самого Univet. Тримає всю структуру:
+     номери секцій, підписи полів, кнопки. */
+  #up-and-do-repair-root .mono {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Темна шапка. Фон точно такий, як тло знімків Univet, тому фото
+     переходить у нього без видимого шва. */
+  #up-and-do-repair-root .hero {
+    background: #000;
+    margin: -72px -32px 56px;
+    padding: 64px 32px 0;
+    display: grid;
+    grid-template-columns: 1fr 46%;
+    align-items: end;
+    gap: 24px;
+    overflow: hidden;
+  }
+  #up-and-do-repair-root .hero-text { padding-bottom: 64px; }
+  #up-and-do-repair-root .hero-img { align-self: end; margin-bottom: -4px; }
+  #up-and-do-repair-root .hero-img img {
+    display: block; width: 100%; height: auto;
+    mix-blend-mode: screen;
+  }
+  #up-and-do-repair-root .hero h1 { color: #FFFFFF; }
+  #up-and-do-repair-root .hero .lede { color: #B4B4B4; margin-bottom: 0; max-width: 40ch; }
+
+  #up-and-do-repair-root .eyebrow {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; color: var(--accent); margin-bottom: 26px;
+  }
+  #up-and-do-repair-root .hero .eyebrow { color: #4CAF6B; }
+  #up-and-do-repair-root .hero .eyebrow::before { background: #4CAF6B; }
+
+  /* Ілюстрація обраної категорії. Знімок на чорному, тому тримаємо його
+     в темній плитці, а не просто на білому. */
+  #up-and-do-repair-root .cat-preview {
+    display: none; margin: 26px 0 0; padding: 0;
+    background: #000; border-radius: 2px; overflow: hidden;
+    position: relative;
+  }
+  #up-and-do-repair-root .cat-preview.visible { display: block; }
+  #up-and-do-repair-root .cat-preview img {
+    display: block; width: 100%; height: 190px; object-fit: cover; object-position: center;
+  }
+  #up-and-do-repair-root .cat-preview figcaption {
+    position: absolute; left: 20px; bottom: 16px;
+    font-size: 10.5px; color: #FFFFFF; letter-spacing: 0.14em;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif; font-weight: 400;
+  }
+  #up-and-do-repair-root .eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--accent); display: inline-block;
+  }
+
+  #up-and-do-repair-root h1 {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-size: clamp(38px, 6.2vw, 58px);
+    line-height: 1.04;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+
+  #up-and-do-repair-root .lede {
+    font-size: 16px; line-height: 1.65; color: var(--ink-soft);
+    max-width: 52ch; margin: 0 0 60px; font-weight: 400;
+  }
+
+  /* Секції розділені волосяною лінією, а не відступом — так робить Univet. */
+  #up-and-do-repair-root .section {
+    padding-top: 34px;
+    margin-bottom: 44px;
+    border-top: 1px solid var(--line-soft);
+  }
+  #up-and-do-repair-root .section-title {
+    font-size: 11.5px; color: var(--ink); margin-bottom: 30px;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  #up-and-do-repair-root .section-title .num {
+    font-size: 11.5px; color: var(--accent); letter-spacing: 0.1em;
+  }
+
+  #up-and-do-repair-root .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 34px; }
+  #up-and-do-repair-root .grid + .grid,
+  #up-and-do-repair-root .field + .grid,
+  #up-and-do-repair-root .grid + .field { margin-top: 26px; }
+  #up-and-do-repair-root .field { margin-bottom: 26px; }
+  #up-and-do-repair-root .grid .field { margin-bottom: 0; }
+
+  /* Селектор навмисно з класом: підписи мають class="mono", і правило .mono
+     має вищу специфічність за просте label — без цього вага 500 не діяла. */
+  #up-and-do-repair-root label.mono,
+  #up-and-do-repair-root label {
+    display: block;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 500; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--label); margin-bottom: 11px;
+  }
+
+  /* Поля — лінією знизу, без коробки. Головна прикмета фірмового стилю. */
+  #up-and-do-repair-root input[type=text],
+  #up-and-do-repair-root input[type=tel],
+  #up-and-do-repair-root input[type=email],
+  #up-and-do-repair-root input[type=number],
+  #up-and-do-repair-root select,
+  #up-and-do-repair-root textarea {
+    width: 100%;
+    font-family: inherit; font-weight: 400; font-size: 16.5px;
+    padding: 9px 0 11px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    color: var(--ink);
+    outline: none;
+    appearance: none;
+    transition: border-color .18s ease;
+  }
+  #up-and-do-repair-root select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%238C8C8C' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat; background-position: right 2px center; padding-right: 28px;
+    cursor: pointer;
+  }
+  #up-and-do-repair-root input:focus,
+  #up-and-do-repair-root select:focus,
+  #up-and-do-repair-root textarea:focus {
+    border-bottom-color: var(--accent);
+    border-bottom-width: 2px;
+    padding-bottom: 10px;
+  }
+  #up-and-do-repair-root input::placeholder,
+  #up-and-do-repair-root textarea::placeholder { color: var(--placeholder); font-weight: 400; }
+  #up-and-do-repair-root textarea {
+    min-height: 76px; resize: vertical; line-height: 1.55;
+  }
+  #up-and-do-repair-root select:disabled { color: var(--muted); cursor: not-allowed; }
+
+  /* Поле ручного введення моделі: зʼявляється лише за потреби. */
+  #up-and-do-repair-root .other-model { display: none; }
+  #up-and-do-repair-root .other-model.visible { display: block; }
+
+  #up-and-do-repair-root .optional-tag {
+    color: var(--muted); text-transform: none; letter-spacing: 0.02em;
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 400;
+  }
+  #up-and-do-repair-root .half { max-width: calc(50% - 17px); }
+
+  /* Вибір деталі: без заливки, тільки контур. Зелений — лише на обраному. */
+  #up-and-do-repair-root .part-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  #up-and-do-repair-root .part-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 11px;
+    padding: 20px 8px 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 500; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--label);
+    text-align: center; line-height: 1.35;
+    transition: border-color .18s ease, color .18s ease, background-color .18s ease;
+  }
+  #up-and-do-repair-root .part-btn:hover { border-color: var(--ink); color: var(--ink); }
+  #up-and-do-repair-root .part-btn svg { stroke: var(--ink-soft); transition: stroke .18s ease; }
+  #up-and-do-repair-root .part-btn:hover svg { stroke: var(--ink); }
+  #up-and-do-repair-root .part-btn.selected {
+    border-color: var(--accent); background: var(--accent-wash); color: var(--accent);
+  }
+  #up-and-do-repair-root .part-btn.selected svg { stroke: var(--accent); }
+  #up-and-do-repair-root .part-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  #up-and-do-repair-root .attach-zone {
+    border: 1px dashed var(--line); border-radius: 2px; padding: 24px; background: var(--panel);
+  }
+  #up-and-do-repair-root .attach-btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: #FFFFFF; border: 1px solid var(--line); color: var(--ink);
+    padding: 11px 20px; border-radius: 999px;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: border-color .18s ease, color .18s ease;
+  }
+  #up-and-do-repair-root .attach-btn:hover { border-color: var(--accent); color: var(--accent); }
+  #up-and-do-repair-root .attach-hint {
+    font-size: 13px; color: var(--ink-soft); margin-top: 12px; line-height: 1.55; font-weight: 400;
+  }
+  #up-and-do-repair-root .attach-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+  #up-and-do-repair-root .attach-chip { position: relative; width: 82px; }
+  #up-and-do-repair-root .attach-thumb {
+    width: 82px; height: 82px; border-radius: 2px; object-fit: cover;
+    border: 1px solid var(--line); display: block;
+  }
+  #up-and-do-repair-root .attach-file-icon {
+    width: 82px; height: 82px; border-radius: 2px; border: 1px solid var(--line);
+    background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: var(--ink-soft);
+  }
+  #up-and-do-repair-root .attach-name {
+    font-size: 11px; color: var(--ink-soft); margin-top: 6px; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400;
+  }
+  #up-and-do-repair-root .attach-remove {
+    position: absolute; top: -8px; right: -8px; width: 21px; height: 21px; border-radius: 50%;
+    background: var(--ink); color: #fff; border: 2px solid var(--panel); font-size: 13px; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Згода — теж <label>, тому явно скидаємо стиль підписів полів:
+     інакше вона стає вузьким шрифтом і капслоком, і читати її важко. */
+  #up-and-do-repair-root .consent {
+    display: flex; gap: 12px; align-items: flex-start; margin: 10px 0 20px;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14.5px; line-height: 1.55; color: var(--ink); font-weight: 400;
+    text-transform: none; letter-spacing: normal;
+    cursor: pointer;
+  }
+  #up-and-do-repair-root .consent input {
+    margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent); flex: none; cursor: pointer;
+  }
+  #up-and-do-repair-root .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  #up-and-do-repair-root .privacy { margin: -10px 0 34px 28px; }
+  #up-and-do-repair-root .privacy summary {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); cursor: pointer;
+    list-style: none; display: inline-block; padding: 3px 0;
+  }
+  #up-and-do-repair-root .privacy summary::-webkit-details-marker { display: none; }
+  #up-and-do-repair-root .privacy summary::before { content: "+ "; }
+  #up-and-do-repair-root .privacy[open] summary::before { content: "– "; }
+  #up-and-do-repair-root .privacy summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #up-and-do-repair-root .privacy-body {
+    margin-top: 14px; padding: 20px 22px;
+    background: var(--panel); border-left: 2px solid var(--accent);
+    font-size: 13.5px; line-height: 1.7; color: var(--ink-soft); max-width: 62ch; font-weight: 400;
+  }
+  #up-and-do-repair-root .privacy-body p { margin: 0 0 12px; }
+  #up-and-do-repair-root .privacy-body p:last-child { margin-bottom: 0; }
+  #up-and-do-repair-root .privacy-body strong { color: var(--ink); font-weight: 600; }
+  #up-and-do-repair-root .privacy-body a { color: var(--accent); }
+
+  /* Кнопка-пігулка в зеленому — форма, яку Univet використовує на сайті. */
+  #up-and-do-repair-root .submit-btn {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--accent); color: #fff; border: none;
+    padding: 18px 46px; border-radius: 999px;
+    cursor: pointer; margin-top: 8px;
+    transition: background-color .18s ease;
+  }
+  #up-and-do-repair-root .submit-btn:hover { background: var(--accent-deep); }
+  #up-and-do-repair-root .submit-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  #up-and-do-repair-root .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  #up-and-do-repair-root .error-text {
+    font-size: 13px; color: var(--danger); margin-top: 14px; line-height: 1.5; font-weight: 400;
+  }
+
+  #up-and-do-repair-root .confirm-panel {
+    border-top: 2px solid var(--accent);
+    background: var(--panel);
+    padding: 44px 40px;
+  }
+  #up-and-do-repair-root .confirm-panel .ok-badge {
+    display: inline-block;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+  #up-and-do-repair-root .req-number {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-size: 46px; font-weight: 300; letter-spacing: 0.01em; margin: 2px 0 18px;
+    color: var(--ink);
+  }
+  #up-and-do-repair-root .copy-btn {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: transparent; border: 1px solid var(--line); color: var(--ink-soft);
+    padding: 11px 22px; border-radius: 999px; cursor: pointer;
+    transition: border-color .18s ease, color .18s ease;
+  }
+  #up-and-do-repair-root .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 720px) {
+    #up-and-do-repair-root .part-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    #up-and-do-repair-root .hero {
+      grid-template-columns: 1fr; align-items: stretch; gap: 0;
+    }
+    #up-and-do-repair-root .hero-text { padding-bottom: 32px; }
+    #up-and-do-repair-root .hero-img { max-width: 340px; margin: 0 auto -4px; }
+  }
+  @media (max-width: 560px) {
+    #up-and-do-repair-root { padding: 48px 20px 64px; }
+    #up-and-do-repair-root .hero { margin: -48px -20px 40px; padding: 44px 20px 0; }
+    #up-and-do-repair-root .grid { grid-template-columns: 1fr; }
+    #up-and-do-repair-root .half { max-width: 100%; }
+    #up-and-do-repair-root .part-grid { grid-template-columns: repeat(2, 1fr); }
+    #up-and-do-repair-root .lede { margin-bottom: 40px; }
+    #up-and-do-repair-root .confirm-panel { padding: 32px 24px; }
+    #up-and-do-repair-root .req-number { font-size: 36px; }
+    #up-and-do-repair-root .submit-btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #up-and-do-repair-root * { transition: none !important; }
+  }
+
+  /* Панель з нашою адресою — те, заради чого клієнт відкриває сторінку. */
+  #up-and-do-repair-root .our-address {
+    background: #FFFFFF; border-left: 3px solid var(--accent);
+    padding: 22px 24px; margin: 0 0 34px;
+  }
+  #up-and-do-repair-root .our-address h2 {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 500; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 14px;
+  }
+  #up-and-do-repair-root .our-address dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 18px; }
+  #up-and-do-repair-root .our-address dt {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-weight: 400; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--label); padding-top: 3px;
+  }
+  #up-and-do-repair-root .our-address dd { margin: 0; font-size: 15px; color: var(--ink); }
+  #up-and-do-repair-root .copy-line {
+    background: none; border: none; padding: 0; margin-left: 10px; cursor: pointer;
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  }
+  /* Пояснення про оплату доставки — різне для гарантії та платного ремонту. */
+  #up-and-do-repair-root .who-pays {
+    font-size: 14px; line-height: 1.6; color: var(--ink-soft);
+    padding: 16px 18px; background: #FFFFFF; border: 1px solid var(--line);
+    margin: 0 0 34px;
+  }
+  #up-and-do-repair-root .who-pays strong { color: var(--ink); font-weight: 600; }
+  #up-and-do-repair-root .req-badge {
+    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-size: 13px; letter-spacing: 0.12em; color: var(--accent);
+  }
+  #up-and-do-repair-root .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 640px) {
+    #up-and-do-repair-root .method-grid { grid-template-columns: repeat(2, 1fr); }
+    #up-and-do-repair-root .our-address dl { grid-template-columns: 1fr; gap: 4px 0; }
+    #up-and-do-repair-root .our-address dd { margin-bottom: 10px; }
+  }
+</style>
+
+<script>
+(function () {
+  // ── ВАШІ ДАНІ ─────────────────────────────────────────────────────────
+  // Це те, що клієнт побачить і за чим відправлятиме виріб.
+  // Міняти тут — і залити файл на GitHub.
+  const OFFICE = {
+    city:      'Київ',
+    np:        'Відділення №198',
+    recipient: 'ФОП Габорак Микола Іванович',
+    code:      '2458405992',
+    phone:     '+380 93 617 35 79'
+  };
+  const CONTACT_EMAIL = 'service_manager@up-and-do.com';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx0Z7-JrrCyDbc17bnw0X7UyelKeijPXC-_hNSLLm5YtFwLch7kHyIjuJOKQYZJ216pyw/exec';
+  const IMG_LIGHT = 'data:image/jpeg;base64,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';
+
+  const METHODS = [
+    { id: 'np',    label: 'Нова Пошта',       icon: '<rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 11h18"/>' },
+    { id: 'taxi',  label: 'Таксі',            icon: '<path d="M5 17h14l-1.5-6h-11z"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/><path d="M9 11V8h6v3"/>' },
+    { id: 'self',  label: 'Привезу особисто', icon: '<circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>' },
+    { id: 'other', label: 'Інше',             icon: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/>' }
+  ];
+
+  const params = new URLSearchParams(location.search);
+  const requestNumber = (params.get('z') || '').trim();
+  const repairType = params.get('t') === 'w' ? 'warranty'
+                   : params.get('t') === 'p' ? 'paid' : 'unknown';
+
+  const root = document.getElementById('up-and-do-repair-root');
+
+  function el(tag, attrs, children) {
+    const e = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === 'class') e.className = attrs[k];
+      else if (k === 'html') e.innerHTML = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach(c => c && e.appendChild(c));
+    return e;
+  }
+  function field(labelText, inputEl, tag) {
+    const f = el('div', { class: 'field' });
+    const lbl = el('label', { class: 'mono' }, [document.createTextNode(labelText)]);
+    if (tag) lbl.appendChild(el('span', { class: 'optional-tag' }, [document.createTextNode(' — ' + tag)]));
+    f.appendChild(lbl);
+    f.appendChild(inputEl);
+    return f;
+  }
+
+  // Без номера заявки форма марна: ми не знатимемо, до кого віднести відповідь.
+  if (!requestNumber) {
+    root.appendChild(el('div', { class: 'hero' }, [
+      el('div', { class: 'hero-text' }, [
+        el('div', { class: 'eyebrow mono' }, [document.createTextNode('Сервіс Univet')]),
+        el('h1', {}, [document.createTextNode('Посилання неповне')]),
+        el('p', { class: 'lede' }, [document.createTextNode(
+          'У посиланні немає номера заявки. Відкрийте його з повідомлення від менеджера ' +
+          'повністю або напишіть нам на ' + CONTACT_EMAIL + '.'
+        )])
+      ])
+    ]));
+    return;
+  }
+
+  // ── шапка ──
+  const hero = el('div', { class: 'hero' });
+  const heroText = el('div', { class: 'hero-text' });
+  heroText.appendChild(el('div', { class: 'eyebrow mono' }, [document.createTextNode('Заявка ' + requestNumber)]));
+  heroText.appendChild(el('h1', {}, [document.createTextNode('Як передати виріб на ремонт')]));
+  heroText.appendChild(el('p', { class: 'lede' }, [document.createTextNode(
+    'Ми розглянули вашу заявку. Залишилося домовитися, як виріб потрапить до нас — ' +
+    'оберіть зручний спосіб, і менеджер підтвердить деталі.'
+  )]));
+  hero.appendChild(heroText);
+  hero.appendChild(el('div', { class: 'hero-img' }, [
+    el('img', { src: IMG_LIGHT, alt: 'Обладнання Univet' })
+  ]));
+  root.appendChild(hero);
+
+  // ── хто платить ──
+  const pays = el('div', { class: 'who-pays' });
+  if (repairType === 'warranty') {
+    pays.innerHTML = '<strong>Випадок гарантійний.</strong> Відправку виробу до нас оплачуєте ви.';
+  } else if (repairType === 'paid') {
+    pays.innerHTML = '<strong>Випадок негарантійний.</strong> Відправку виробу до нас оплачуєте ви. ' +
+      'Вартість ремонту менеджер узгодить з вами окремо.';
+  } else {
+    pays.innerHTML = 'Відправку виробу до нас оплачуєте ви. Тип ремонту менеджер уточнить після огляду.';
+  }
+  root.appendChild(pays);
+
+  // ── наша адреса ──
+  const addr = el('div', { class: 'our-address' });
+  addr.appendChild(el('h2', {}, [document.createTextNode('Куди надсилати')]));
+  const dl = el('dl');
+  function row(term, value, copyable) {
+    dl.appendChild(el('dt', {}, [document.createTextNode(term)]));
+    const dd = el('dd', {}, [document.createTextNode(value)]);
+    if (copyable) {
+      const btn = el('button', { type: 'button', class: 'copy-line' }, [document.createTextNode('копіювати')]);
+      btn.addEventListener('click', () => {
+        navigator.clipboard.writeText(value).then(() => {
+          btn.textContent = 'скопійовано';
+          setTimeout(() => btn.textContent = 'копіювати', 1500);
+        });
+      });
+      dd.appendChild(btn);
+    }
+    dl.appendChild(dd);
+  }
+  row('Отримувач', OFFICE.recipient, true);
+  row('ЄДРПОУ / ІПН', OFFICE.code, true);
+  row('Нова Пошта', OFFICE.city + ', ' + OFFICE.np, true);
+  row('Телефон', OFFICE.phone, true);
+  addr.appendChild(dl);
+  root.appendChild(addr);
+
+  // ── форма ──
+  const form = el('form');
+
+  const s1 = el('div', { class: 'section' });
+  s1.appendChild(el('div', { class: 'section-title mono' }, [
+    el('span', { class: 'num' }, [document.createTextNode('01')]),
+    document.createTextNode('Як передаєте виріб')
+  ]));
+
+  const methodField = el('div', { class: 'field' });
+  methodField.appendChild(el('label', { class: 'mono' }, [document.createTextNode('Оберіть спосіб')]));
+  const methodGrid = el('div', { class: 'method-grid', role: 'radiogroup', 'aria-label': 'Спосіб доставки' });
+  let selectedMethod = null;
+  const methodBtns = {};
+  METHODS.forEach(m => {
+    const btn = el('div', { class: 'part-btn', role: 'radio', tabindex: '0', 'aria-checked': 'false' }, [
+      el('svg', { width: '26', height: '26', viewBox: '0 0 24 24', fill: 'none',
+        'stroke-width': '1.6', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', html: m.icon }),
+      el('span', {}, [document.createTextNode(m.label)])
+    ]);
+    const pick = () => {
+      Object.values(methodBtns).forEach(b => {
+        b.classList.remove('selected'); b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('selected'); btn.setAttribute('aria-checked', 'true');
+      selectedMethod = m;
+      applyMethod();
+    };
+    btn.addEventListener('click', pick);
+    btn.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); }
+    });
+    methodBtns[m.id] = btn;
+    methodGrid.appendChild(btn);
+  });
+  methodField.appendChild(methodGrid);
+  s1.appendChild(methodField);
+
+  // Поле під деталі — підпис і підказка міняються залежно від способу,
+  // щоб клієнт не гадав, що саме від нього хочуть.
+  const inDetails = el('textarea', {});
+  const detailsField = field('Деталі', inDetails);
+  const detailsLabel = detailsField.querySelector('label');
+  s1.appendChild(detailsField);
+
+  const inWhen = el('input', { type: 'text', placeholder: 'напр. завтра до обіду' });
+  const whenField = field('Коли вам зручно', inWhen, 'необов’язково');
+  s1.appendChild(whenField);
+
+  function applyMethod() {
+    if (!selectedMethod) return;
+    const map = {
+      np:    ['Ваше відділення Нової Пошти та ПІБ відправника',
+              'напр. Львів, відділення №12, Іваненко Іван, +380 67 000 00 00'],
+      taxi:  ['Звідки забрати виріб',
+              'напр. Київ, вул. Хрещатик 1, клініка «Приклад», запитати Ірину'],
+      self:  ['Коли плануєте приїхати',
+              'напр. у четвер після 15:00 — адресу менеджер підкаже телефоном'],
+      other: ['Опишіть, як вам зручно',
+              'напр. передам з колегою, він буде в Києві у вівторок']
+    };
+    const [labelText, placeholder] = map[selectedMethod.id];
+    detailsLabel.textContent = labelText;
+    inDetails.placeholder = placeholder;
+    inDetails.setAttribute('required', 'required');
+    // «Привезу особисто» вже містить час у самому полі деталей.
+    whenField.style.display = selectedMethod.id === 'self' ? 'none' : '';
+  }
+
+  form.appendChild(s1);
+
+  const s2 = el('div', { class: 'section' });
+  s2.appendChild(el('div', { class: 'section-title mono' }, [
+    el('span', { class: 'num' }, [document.createTextNode('02')]),
+    document.createTextNode('Якщо є що додати')
+  ]));
+  const inComment = el('textarea', { placeholder: 'напр. виріб у рідному кейсі, всередині ще й запасна лінза' });
+  s2.appendChild(field('Коментар', inComment, 'необов’язково'));
+  form.appendChild(s2);
+
+  const inHoneypot = el('input', { type: 'text', name: 'website', tabindex: '-1', autocomplete: 'off' });
+  form.appendChild(el('div', { class: 'hp', 'aria-hidden': 'true' }, [inHoneypot]));
+
+  const errBox = el('div', { class: 'error-text' });
+  const submitBtn = el('button', { type: 'submit', class: 'submit-btn mono' },
+    [document.createTextNode('Надіслати відповідь')]);
+  form.appendChild(errBox);
+  form.appendChild(submitBtn);
+  root.appendChild(form);
+
+  const confirmHolder = el('div');
+  root.appendChild(confirmHolder);
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    errBox.textContent = '';
+    if (!selectedMethod) {
+      errBox.textContent = 'Будь ласка, оберіть спосіб передачі виробу.';
+      return;
+    }
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Надсилаємо…';
+
+    const payload = {
+      formType: 'delivery',
+      requestNumber: requestNumber,
+      website: inHoneypot.value,
+      delivery: {
+        method: selectedMethod.label,
+        methodCode: selectedMethod.id,
+        details: inDetails.value.trim(),
+        when: inWhen.value.trim(),
+        comment: inComment.value.trim()
+      }
+    };
+
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const result = await res.json();
+      if (result.status !== 'ok') throw new Error(result.error || 'unknown');
+      showConfirmation();
+    } catch (err) {
+      errBox.textContent = 'Не вдалося надіслати відповідь. Перевірте зв’язок і спробуйте ще раз. ' +
+        'Якщо помилка повторюється — напишіть менеджеру на ' + CONTACT_EMAIL + '.';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Надіслати відповідь';
+    }
+  });
+
+  function showConfirmation() {
+    form.style.display = 'none';
+    confirmHolder.innerHTML = '';
+    const panel = el('div', { class: 'confirm-panel' });
+    panel.appendChild(el('div', { class: 'ok-badge' }, [document.createTextNode('Відповідь прийнято')]));
+    panel.appendChild(el('div', { class: 'req-number' }, [document.createTextNode(requestNumber)]));
+    panel.appendChild(el('p', { style: 'margin:0; font-size:14.5px; color: var(--ink-soft); line-height:1.6;' }, [
+      document.createTextNode(
+        'Дякуємо. Менеджер зв’яжеться з вами, щоб підтвердити деталі. ' +
+        'Адреса для відправлення лишається вище на цій сторінці — можете повернутися до неї будь-коли.'
+      )
+    ]));
+    confirmHolder.appendChild(panel);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+})();
+</script>
+</body>
+</html>
