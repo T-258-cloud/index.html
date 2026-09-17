@@ -223,6 +223,7 @@
   #up-and-do-repair-root .attach-zone {
     border: 1px dashed var(--line); border-radius: 2px; padding: 24px; background: var(--panel);
   }
+  #up-and-do-repair-root .attach-zone.is-invalid { border: 1px solid var(--danger); }
   #up-and-do-repair-root .attach-btn {
     display: inline-flex; align-items: center; gap: 9px;
     background: #FFFFFF; border: 1px solid var(--line); color: var(--ink);
@@ -428,6 +429,34 @@
     if (bytes < 1024) return bytes + ' Б';
     if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' КБ';
     return (bytes / (1024 * 1024)).toFixed(1) + ' МБ';
+  }
+
+  /**
+   * Стискає фото до 1600 px по більшій стороні, JPEG.
+   *
+   * Фото з телефона важить 3–6 МБ, а ліміт на всі файли — 8 МБ. Без
+   * стискання клієнт з двома фото впирався б у ліміт, а фото тепер
+   * обов'язкове — тобто не зміг би надіслати заявку взагалі.
+   * Якщо браузер формат не відкриває (буває з HEIC), лишаємо оригінал.
+   */
+  const PHOTO_MAX_SIDE = 1600;
+  async function compressImage(file) {
+    if (!/^image\/(jpeg|png|webp|heic|heif)$/i.test(file.type)) return null;
+    try {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, PHOTO_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      const size = Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 3 / 4);
+      // Стискання має сенс, лише якщо файл справді зменшився.
+      if (size >= file.size) return null;
+      return { name: file.name.replace(/\.[^.]+$/, '') + '.jpg', size, type: 'image/jpeg', dataUrl };
+    } catch (e) {
+      return null;
+    }
   }
 
   function readAsDataURL(file) {
@@ -675,7 +704,6 @@
   const attachments = [];
   const attachField = el('div', { class: 'field' });
   const attachLabel = el('label', { class: 'mono' }, [document.createTextNode('Фото / відео несправності')]);
-  attachLabel.appendChild(el('span', { class: 'optional-tag' }, [document.createTextNode(' — необов’язково')]));
   attachField.appendChild(attachLabel);
 
   const attachZone = el('div', { class: 'attach-zone' });
@@ -685,7 +713,7 @@
     document.createTextNode('Прикріпити файли')
   ]);
   attachBtn.addEventListener('click', () => fileInput.click());
-  const attachHint = el('div', { class: 'attach-hint' }, [document.createTextNode('До ' + MAX_ATTACHMENTS + ' файлів, фото або коротке відео. Великі відео краще надіслати менеджеру окремо.')]);
+  const attachHint = el('div', { class: 'attach-hint' }, [document.createTextNode('Обов’язково хоча б одне фото, на якому видно несправність. Усього до ' + MAX_ATTACHMENTS + ' файлів: фото або коротке відео. Великі відео краще надіслати менеджеру окремо.')]);
   const attachList = el('div', { class: 'attach-list' });
   attachZone.appendChild(fileInput);
   attachZone.appendChild(attachBtn);
@@ -721,6 +749,7 @@
 
   fileInput.addEventListener('change', async () => {
     attachErr.textContent = '';
+    attachZone.classList.remove('is-invalid');
     const files = Array.from(fileInput.files || []);
     fileInput.value = '';
     for (const file of files) {
@@ -728,13 +757,15 @@
         attachErr.textContent = 'Максимум ' + MAX_ATTACHMENTS + ' файли на заявку.';
         break;
       }
-      if (currentTotalBytes() + file.size > MAX_TOTAL_BYTES) {
-        attachErr.textContent = 'Файл «' + file.name + '» занадто великий для завантаження тут — надішліть його менеджеру напряму (email/Viber/Telegram) із номером заявки.';
-        continue;
-      }
       try {
-        const dataUrl = await readAsDataURL(file);
-        attachments.push({ name: file.name, size: file.size, type: file.type, dataUrl });
+        const compressed = await compressImage(file);
+        const item = compressed || { name: file.name, size: file.size, type: file.type, dataUrl: null };
+        if (currentTotalBytes() + item.size > MAX_TOTAL_BYTES) {
+          attachErr.textContent = 'Файл «' + file.name + '» занадто великий для завантаження тут — надішліть його менеджеру напряму (email/Viber/Telegram) із номером заявки.';
+          continue;
+        }
+        if (!item.dataUrl) item.dataUrl = await readAsDataURL(file);
+        attachments.push(item);
         renderAttachList();
       } catch (e) {
         attachErr.textContent = 'Не вдалося додати файл «' + file.name + '».';
@@ -798,6 +829,14 @@
     errBox.textContent = '';
     if (!selectedPart) { errBox.textContent = 'Будь ласка, оберіть, яка деталь пошкоджена.'; return; }
     if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (!attachments.some(a => /^image\//.test(a.type))) {
+      attachErr.textContent = 'Додайте хоча б одне фото несправності — без нього менеджер не зможе оцінити ремонт.';
+      attachZone.classList.add('is-invalid');
+      errBox.textContent = 'Не вистачає фото несправності.';
+      attachField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      attachBtn.focus({ preventScroll: true });
+      return;
+    }
     submitBtn.disabled = true;
     submitBtn.textContent = 'Надсилаємо…';
 
